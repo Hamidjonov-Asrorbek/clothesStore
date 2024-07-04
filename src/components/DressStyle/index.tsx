@@ -7,7 +7,7 @@ import gym from "../../../public/gym.png";
 
 function DressStyle() {
   return (
-    <section>
+    <section className="mb-12">
       <div className="container bg-stone-200 rounded-[40px] p-16">
         <h2 className="text-5xl font-bold text-center text-black mb-16">
           BROWSE BY dress STYLE
