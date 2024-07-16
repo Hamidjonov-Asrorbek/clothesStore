@@ -7,6 +7,7 @@ const nextConfig = {
         hostname: "cdn.dummyjson.com",
       },
     ],
+    domains: ["firebasestorage.googleapis.com"],
   },
 };
 

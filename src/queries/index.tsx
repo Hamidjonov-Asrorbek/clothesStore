@@ -1,36 +1,38 @@
 "server-only";
 
-export async function GetNewArrials() {
-  try {
-    const req = await fetch(
-      "https://dummyjson.com/products/category/mens-shirts",
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-    const res = await req.json();
-    return res;
-  } catch (error) {
-    // return error;
-  }
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../../firebase/config";
+
+interface Product {
+  // Add other product fields here, e.g., name, price, etc.
+  name: string;
+  price: number;
+  description: string;
 }
-export async function GetTopSelling() {
-  try {
-    const req = await fetch(
-      "https://dummyjson.com/products/category/womens-dresses",
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-    const res = await req.json();
-    return res;
-  } catch (error) {
-    // return error;
-  }
+
+interface ProductWithId extends Product {
+  id: string;
+}
+
+export async function GetNewArrivals(): Promise<ProductWithId[]> {
+  const querySnapshot = await getDocs(collection(db, "products"));
+  const products: ProductWithId[] = [];
+  querySnapshot.forEach((doc) => {
+    const data = doc.data() as Product;
+    products.push({ ...data, id: doc.id });
+  });
+
+  console.log("Products data:", products);
+  return products;
+}
+export async function GetTopSelling(): Promise<ProductWithId[]> {
+  const querySnapshot = await getDocs(collection(db, "products"));
+  const products: ProductWithId[] = [];
+  querySnapshot.forEach((doc) => {
+    const data = doc.data() as Product;
+    products.push({ ...data, id: doc.id });
+  });
+
+  console.log("Products data:", products);
+  return products;
 }
