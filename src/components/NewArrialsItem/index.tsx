@@ -9,7 +9,7 @@ export default async function NewArrialsItem() {
   const data: any = await GetNewArrivals();
 
   const products = data?.slice(0, 4);
-  console.log(data);
+  // console.log(data);
   // const products = data?.slice(0, 4);
 
   return (

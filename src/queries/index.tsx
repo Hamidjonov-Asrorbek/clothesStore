@@ -22,7 +22,7 @@ export async function GetNewArrivals(): Promise<ProductWithId[]> {
     products.push({ ...data, id: doc.id });
   });
 
-  console.log("Products data:", products);
+  // console.log("Products data:", products);
   return products;
 }
 export async function GetTopSelling(): Promise<ProductWithId[]> {
@@ -33,6 +33,6 @@ export async function GetTopSelling(): Promise<ProductWithId[]> {
     products.push({ ...data, id: doc.id });
   });
 
-  console.log("Products data:", products);
+  // console.log("Products data:", products);
   return products;
 }

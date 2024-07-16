@@ -1,12 +1,23 @@
 "use client";
-import { Rate } from "antd";
+import { Modal, Rate } from "antd";
+import { tree } from "next/dist/build/templates/app-page";
 import Image from "next/image";
+import Link from "next/link";
 import React, { useState } from "react";
 // import ProductSection from "../ProductSection";
 
 export default function ProductDetail({ data }: any) {
   const [img, setImg] = useState(0);
   const [quantity, setQuantity] = useState(1);
+  const [user, setUser] = useState<string | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+  if (typeof window !== "undefined") {
+    const storedUser = localStorage.getItem("user");
+    setUser(storedUser);
+  }
 
   const increment = () => {
     setQuantity(quantity + 1);
@@ -17,6 +28,20 @@ export default function ProductDetail({ data }: any) {
       setQuantity(quantity - 1);
     }
   };
+  function addToCart() {
+    const cart = localStorage.getItem("cart");
+    if (user) {
+      if (cart) {
+        const cartData = JSON.parse(cart);
+        cartData.push({ ...data, quantity });
+        localStorage.setItem("cart", JSON.stringify(cartData));
+      } else {
+        localStorage.setItem("cart", JSON.stringify([{ ...data, quantity }]));
+      }
+    } else {
+      showModal();
+    }
+  }
   return (
     <>
       <section className="py-16">
@@ -143,11 +168,33 @@ export default function ProductDetail({ data }: any) {
                   +
                 </button>
               </div>
-              <button className="btn rounded-3xl py-4 px-20 text-white bg-black hover:bg-white hover:text-black">
+              <button
+                className="btn rounded-3xl py-4 px-20 text-white bg-black hover:bg-white hover:text-black"
+                onClick={addToCart}
+              >
                 Add to cart
               </button>
             </div>
           </div>
+          <Modal title="Basic Modal" open={isModalOpen}>
+            <h1 className="text-2xl text-center text-red-600">
+              You are not logged in. Please login or sign up to continue.
+            </h1>
+            <Link
+              href="/login"
+              className="btn bg-black text-white rounded-3xl py-4 px-16"
+              onClick={() => setIsModalOpen(false)}
+            >
+              Login
+            </Link>
+            <Link
+              href="/signup"
+              className="btn bg-black text-white rounded-3xl py-4 px-16"
+              onClick={() => setIsModalOpen(false)}
+            >
+              Sign Up
+            </Link>
+          </Modal>
         </div>
       </section>
 

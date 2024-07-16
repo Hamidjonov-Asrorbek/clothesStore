@@ -1,9 +1,37 @@
-import React from "react";
+"use client";
+import React, { useEffect, useState } from "react";
 import logo from "../../../public/SHOP.CO.svg";
 import Link from "next/link";
 import Image from "next/image";
+import { signOut } from "firebase/auth";
+import { auth } from "../../../firebase/config";
+import { useRouter } from "next/navigation";
 
-export default function Header() {
+const Header: React.FC = () => {
+  const [user, setUser] = useState<string | null>(null);
+
+  const router = useRouter();
+
+  useEffect(() => {
+    // Check if localStorage is available (client-side)
+    if (typeof window !== "undefined") {
+      const storedUser = localStorage.getItem("user");
+      setUser(storedUser);
+    }
+  }, [user]);
+
+  const handleLogOut = () => {
+    signOut(auth)
+      .then(() => {
+        // Sign-out successful.
+        router.push("/login");
+        localStorage.setItem("user", null as any);
+      })
+      .catch((error) => {
+        // An error happened.
+      });
+  };
+  const userPhotoURL = user ? JSON.parse(user)?.photoURL : null;
   return (
     <section className="py-6 bg-white">
       <div className="container">
@@ -101,9 +129,14 @@ export default function Header() {
                 className="btn btn-ghost btn-circle avatar"
               >
                 <div className="w-10 rounded-full">
-                  <img
-                    alt="Tailwind CSS Navbar component"
-                    src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg"
+                  <Image
+                    alt="User Avatar"
+                    src={
+                      userPhotoURL ||
+                      "https://icons.veryicon.com/png/o/miscellaneous/standard/avatar-15.png"
+                    }
+                    width={40}
+                    height={40}
                   />
                 </div>
               </div>
@@ -121,7 +154,7 @@ export default function Header() {
                   <a>Settings</a>
                 </li>
                 <li>
-                  <a>Logout</a>
+                  <a onClick={handleLogOut}>Logout</a>
                 </li>
               </ul>
             </div>
@@ -130,4 +163,6 @@ export default function Header() {
       </div>
     </section>
   );
-}
+};
+
+export default Header;
