@@ -14,11 +14,10 @@ const Header: React.FC = () => {
 
   useEffect(() => {
     // Check if localStorage is available (client-side)
-    if (typeof window !== "undefined") {
-      const storedUser = localStorage.getItem("user");
-      setUser(storedUser);
-    }
-  }, [user]);
+
+    const storedUser = window.localStorage.getItem("user");
+    setUser(storedUser);
+  }, []);
 
   const handleLogOut = () => {
     signOut(auth)

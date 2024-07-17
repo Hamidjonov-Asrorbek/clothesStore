@@ -1,8 +1,8 @@
 "use client";
 import { Modal, Rate } from "antd";
-import { tree } from "next/dist/build/templates/app-page";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 // import ProductSection from "../ProductSection";
 
@@ -11,14 +11,17 @@ export default function ProductDetail({ data }: any) {
   const [quantity, setQuantity] = useState(1);
   const [user, setUser] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const router = useRouter();
   const showModal = () => {
     setIsModalOpen(true);
   };
-  if (typeof window !== "undefined") {
-    const storedUser = localStorage.getItem("user");
-    setUser(storedUser);
-  }
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
 
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
   const increment = () => {
     setQuantity(quantity + 1);
   };
@@ -30,11 +33,16 @@ export default function ProductDetail({ data }: any) {
   };
   function addToCart() {
     const cart = localStorage.getItem("cart");
-    if (user) {
+    if (typeof window !== "undefined") {
+      const storedUser = localStorage.getItem("user");
+      setUser(storedUser);
+    }
+    if (user !== null) {
       if (cart) {
         const cartData = JSON.parse(cart);
         cartData.push({ ...data, quantity });
         localStorage.setItem("cart", JSON.stringify(cartData));
+        router.push("/cart");
       } else {
         localStorage.setItem("cart", JSON.stringify([{ ...data, quantity }]));
       }
@@ -176,7 +184,12 @@ export default function ProductDetail({ data }: any) {
               </button>
             </div>
           </div>
-          <Modal title="Basic Modal" open={isModalOpen}>
+          <Modal
+            title="Basic Modal"
+            open={isModalOpen}
+            onOk={handleOk}
+            onCancel={handleCancel}
+          >
             <h1 className="text-2xl text-center text-red-600">
               You are not logged in. Please login or sign up to continue.
             </h1>

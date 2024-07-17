@@ -70,7 +70,7 @@ function Login() {
         loginData.password
       );
       const user = userCredential.user;
-      localStorage.setItem("user", JSON.stringify(user.providerData));
+      localStorage.setItem("user", JSON.stringify(user));
       router.push("/");
       message.success("Welcome site!");
     } catch (error: any) {
