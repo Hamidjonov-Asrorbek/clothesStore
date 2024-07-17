@@ -30,19 +30,21 @@ export default function ProductDetail({ data }: any) {
   };
   function addToCart() {
     const cart = localStorage.getItem("cart");
-    if (typeof window !== "undefined") {
+    if (typeof window == "undefined") {
       const storedUser = localStorage.getItem("user");
       setUser(storedUser);
     }
-    if (user !== null) {
-      if (cart) {
-        const cartData = JSON.parse(cart);
-        cartData.push({ ...data, quantity });
-        localStorage.setItem("cart", JSON.stringify(cartData));
-        router.push("/cart");
-      } else {
-        localStorage.setItem("cart", JSON.stringify([{ ...data, quantity }]));
-      }
+    if (user !== null || undefined) {
+      console.log(user);
+
+      // if (cart) {
+      //   const cartData = JSON.parse(cart);
+      //   cartData.push({ ...data, quantity });
+      //   localStorage.setItem("cart", JSON.stringify(cartData));
+      //   router.push("/cart");
+      // } else {
+      //   localStorage.setItem("cart", JSON.stringify([{ ...data, quantity }]));
+      // }
     } else {
       showModal();
     }

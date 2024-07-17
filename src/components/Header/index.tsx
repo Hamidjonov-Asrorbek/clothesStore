@@ -8,16 +8,18 @@ import { auth } from "../../../firebase/config";
 import { useRouter } from "next/navigation";
 
 const Header: React.FC = () => {
-  const [user, setUser] = useState<string | null>(null);
+  const [user, setUser] = useState<{
+    displayName: string;
+    photoURL: string;
+  } | null>(null);
+  const [photoURL, setPhotoURL] = useState<string | null>(null);
 
   const router = useRouter();
 
   useEffect(() => {
-    // Check if localStorage is available (client-side)
-
-    const storedUser = window.localStorage.getItem("user");
+    const storedUser = JSON.parse(localStorage.getItem("user") as string);
     setUser(storedUser);
-  }, []);
+  }, [user]);
 
   const handleLogOut = () => {
     signOut(auth)
@@ -30,7 +32,11 @@ const Header: React.FC = () => {
         // An error happened.
       });
   };
-  const userPhotoURL = user ? JSON.parse(user)?.photoURL : null;
+
+  useEffect(() => {
+    const userPhotoURL = user ? user?.photoURL : null;
+    setPhotoURL(userPhotoURL);
+  }, [user ? photoURL : null]);
   return (
     <section className="py-6 bg-white">
       <div className="container">
@@ -131,8 +137,9 @@ const Header: React.FC = () => {
                   <Image
                     alt="User Avatar"
                     src={
-                      userPhotoURL ||
-                      "https://icons.veryicon.com/png/o/miscellaneous/standard/avatar-15.png"
+                      photoURL
+                        ? photoURL
+                        : "https://icons.veryicon.com/png/o/miscellaneous/standard/avatar-15.png"
                     }
                     width={40}
                     height={40}
@@ -144,10 +151,11 @@ const Header: React.FC = () => {
                 className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
               >
                 <li>
-                  <a className="justify-between">
-                    Profile
-                    <span className="badge">New</span>
-                  </a>
+                  {user ? (
+                    <Link href={"/userinfo"}>User Info</Link>
+                  ) : (
+                    <Link href={"/login"}>Login</Link>
+                  )}
                 </li>
                 <li>
                   <a>Settings</a>

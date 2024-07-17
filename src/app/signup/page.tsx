@@ -80,7 +80,7 @@ const SignUp: React.FC = () => {
         });
       }
 
-      localStorage.setItem("user", JSON.stringify(user?.providerData[0]));
+      localStorage.setItem("user", JSON.stringify(user));
       message.success("Sign up successful!");
       router.push("/");
     } catch (error: any) {
