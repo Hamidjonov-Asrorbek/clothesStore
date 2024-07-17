@@ -15,9 +15,6 @@ export default function ProductDetail({ data }: any) {
   const showModal = () => {
     setIsModalOpen(true);
   };
-  const handleOk = () => {
-    setIsModalOpen(false);
-  };
 
   const handleCancel = () => {
     setIsModalOpen(false);
@@ -185,28 +182,30 @@ export default function ProductDetail({ data }: any) {
             </div>
           </div>
           <Modal
-            title="Basic Modal"
             open={isModalOpen}
-            onOk={handleOk}
+            className="text-center"
+            footer={null}
             onCancel={handleCancel}
           >
-            <h1 className="text-2xl text-center text-red-600">
+            <h1 className="text-2xl my-5 text-center text-red-600">
               You are not logged in. Please login or sign up to continue.
             </h1>
-            <Link
-              href="/login"
-              className="btn bg-black text-white rounded-3xl py-4 px-16"
-              onClick={() => setIsModalOpen(false)}
-            >
-              Login
-            </Link>
-            <Link
-              href="/signup"
-              className="btn bg-black text-white rounded-3xl py-4 px-16"
-              onClick={() => setIsModalOpen(false)}
-            >
-              Sign Up
-            </Link>
+            <div className="flex gap-5 justify-center">
+              <Link
+                href="/login"
+                className="btn bg-black text-white rounded-3xl py-4 px-16"
+                onClick={() => setIsModalOpen(false)}
+              >
+                Login
+              </Link>
+              <Link
+                href="/signup"
+                className="btn bg-black text-white rounded-3xl py-4 px-16"
+                onClick={() => setIsModalOpen(false)}
+              >
+                Sign Up
+              </Link>
+            </div>
           </Modal>
         </div>
       </section>
